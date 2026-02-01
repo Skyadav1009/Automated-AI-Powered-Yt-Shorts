@@ -54,4 +54,21 @@ Max 50 characters, curiosity-driven, emotional, must include #Shorts.
 
 9. METADATA
 estimated_duration_seconds, category, posting_time_suggestion (UTC).
+
+REQUIRED OUTPUT FORMAT (JSON ONLY):
+{
+  "idea": "Viral concept string",
+  "script": "Full script text...",
+  "voiceover": "Clean spoken text for TTS...",
+  "stock_video_keywords": ["keyword 1", "keyword 2"],
+  "subtitles": ["Subtitle line 1", "Subtitle line 2"],
+  "title": "Video Title #Shorts",
+  "description": "Video description...",
+  "hashtags": ["#tag1", "#tag2"],
+  "metadata": {
+    "estimated_duration_seconds": 30,
+    "category": "Education",
+    "posting_time_suggestion": "15:00 UTC"
+  }
+}
 `;

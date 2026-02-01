@@ -8,10 +8,11 @@ interface PexelsFinderProps {
   keywords: string[];
   script: string;
   title: string;
+  onVideoSelected?: (videoUrl: string) => void;
 }
 
-export const PexelsFinder: React.FC<PexelsFinderProps> = ({ keywords, script, title }) => {
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem('pexels_api_key') || '');
+export const PexelsFinder: React.FC<PexelsFinderProps> = ({ keywords, script, title, onVideoSelected }) => {
+  const [apiKey, setApiKey] = useState(() => import.meta.env.VITE_PEXELS_API_KEY || localStorage.getItem('pexels_api_key') || '');
   const [videos, setVideos] = useState<PexelsVideo[]>([]);
   const [selectedVideo, setSelectedVideo] = useState<PexelsVideo | null>(null);
   const [selectedKeyword, setSelectedKeyword] = useState(keywords[0]);
@@ -29,7 +30,7 @@ export const PexelsFinder: React.FC<PexelsFinderProps> = ({ keywords, script, ti
 
   const fetchVideos = async (query: string, key: string) => {
     if (!key) return;
-    
+
     setLoading(true);
     setError(null);
     try {
@@ -37,6 +38,9 @@ export const PexelsFinder: React.FC<PexelsFinderProps> = ({ keywords, script, ti
       setVideos(results);
       if (results.length > 0) {
         setSelectedVideo(results[0]);
+        if (onVideoSelected) {
+          onVideoSelected(results[0].video_files[0].link);
+        }
       }
     } catch (err: any) {
       setError(err.message);
@@ -60,7 +64,7 @@ export const PexelsFinder: React.FC<PexelsFinderProps> = ({ keywords, script, ti
             <VideoIcon className="w-4 h-4 text-green-400" />
             <h3>Generated Video Preview</h3>
           </div>
-          <button 
+          <button
             onClick={() => setShowKeyInput(!showKeyInput)}
             className="text-xs text-gray-500 hover:text-white flex items-center gap-1"
           >
@@ -81,7 +85,7 @@ export const PexelsFinder: React.FC<PexelsFinderProps> = ({ keywords, script, ti
                 </a>
               </p>
               <form onSubmit={handleSaveKey} className="flex flex-col gap-2 mt-2">
-                <input 
+                <input
                   type="password"
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
@@ -103,8 +107,8 @@ export const PexelsFinder: React.FC<PexelsFinderProps> = ({ keywords, script, ti
               </div>
             ) : loading ? (
               <div className="aspect-[9/16] max-w-xs mx-auto bg-gray-950 rounded-xl border border-gray-800 flex flex-col items-center justify-center text-gray-500 gap-3 mb-6">
-                 <Loader2 className="w-8 h-8 animate-spin text-brand-500" />
-                 <span className="text-sm font-medium">Composing video...</span>
+                <Loader2 className="w-8 h-8 animate-spin text-brand-500" />
+                <span className="text-sm font-medium">Composing video...</span>
               </div>
             ) : error ? (
               <div className="aspect-[9/16] max-w-xs mx-auto bg-gray-950 rounded-xl border border-gray-800 flex items-center justify-center text-red-400 p-4 text-center text-sm mb-6">
@@ -126,26 +130,29 @@ export const PexelsFinder: React.FC<PexelsFinderProps> = ({ keywords, script, ti
                   <button
                     key={kw}
                     onClick={() => setSelectedKeyword(kw)}
-                    className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
-                      selectedKeyword === kw 
-                        ? 'bg-green-900/30 text-green-400 border-green-800' 
-                        : 'bg-gray-800 text-gray-400 border-gray-700 hover:border-gray-600 hover:text-gray-300'
-                    }`}
+                    className={`text-xs px-3 py-1.5 rounded-full border transition-all ${selectedKeyword === kw
+                      ? 'bg-green-900/30 text-green-400 border-green-800'
+                      : 'bg-gray-800 text-gray-400 border-gray-700 hover:border-gray-600 hover:text-gray-300'
+                      }`}
                   >
                     {kw}
                   </button>
                 ))}
               </div>
-              
+
               {videos.length > 0 && (
                 <div className="grid grid-cols-4 gap-2">
                   {videos.map(video => (
-                    <button 
-                      key={video.id} 
-                      onClick={() => setSelectedVideo(video)}
-                      className={`relative aspect-[9/16] rounded-md overflow-hidden border-2 transition-all ${
-                        selectedVideo?.id === video.id ? 'border-brand-500 ring-2 ring-brand-500/30' : 'border-transparent opacity-60 hover:opacity-100'
-                      }`}
+                    <button
+                      key={video.id}
+                      onClick={() => {
+                        setSelectedVideo(video);
+                        if (onVideoSelected) {
+                          onVideoSelected(video.video_files[0].link);
+                        }
+                      }}
+                      className={`relative aspect-[9/16] rounded-md overflow-hidden border-2 transition-all ${selectedVideo?.id === video.id ? 'border-brand-500 ring-2 ring-brand-500/30' : 'border-transparent opacity-60 hover:opacity-100'
+                        }`}
                     >
                       <img src={video.image} alt="Thumbnail" className="w-full h-full object-cover" />
                     </button>

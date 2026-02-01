@@ -61,7 +61,7 @@ export const generateShortPackage = async (config: GeneratorConfig): Promise<Sho
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-2.0-flash",
       contents: [
         {
           role: "user",
@@ -112,7 +112,7 @@ export const generateVideoPreview = async (prompt: string): Promise<string> => {
 
     while (!operation.done) {
       await new Promise(resolve => setTimeout(resolve, 5000));
-      operation = await ai.operations.getVideosOperation({operation: operation});
+      operation = await ai.operations.getVideosOperation({ operation: operation });
     }
 
     const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
@@ -125,7 +125,7 @@ export const generateVideoPreview = async (prompt: string): Promise<string> => {
     if (!response.ok) {
       throw new Error(`Failed to download video: ${response.statusText}`);
     }
-    
+
     const blob = await response.blob();
     return URL.createObjectURL(blob);
 
