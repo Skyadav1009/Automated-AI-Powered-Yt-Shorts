@@ -5,9 +5,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ViralShorts AI Generator</title>
+
   <link rel="icon" type="image/svg+xml"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+
   <script src="https://cdn.tailwindcss.com"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -31,13 +34,13 @@
       }
     }
   </script>
+
   <style>
     body {
       background-color: #0b0f19;
       color: #f3f4f6;
     }
 
-    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 8px;
       height: 8px;
@@ -56,6 +59,7 @@
       background: #4b5563;
     }
   </style>
+
   <script type="importmap">
 {
   "imports": {
@@ -69,8 +73,42 @@
 </script>
 </head>
 
-<body>
-  <div id="root"></div>
+<body class="min-h-screen flex items-center justify-center">
+
+  <!-- Background Glow -->
+  <div class="absolute inset-0 bg-gradient-to-br from-brand-500/10 via-transparent to-brand-400/10"></div>
+
+  <!-- App Shell -->
+  <div
+    class="relative w-full max-w-6xl mx-auto px-6 py-10 rounded-2xl bg-gray-900/80 backdrop-blur-xl shadow-2xl border border-white/5">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between mb-8">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl">⚡</span>
+        <h1 class="text-xl font-semibold tracking-tight">
+          ViralShorts <span class="text-brand-400">AI</span>
+        </h1>
+      </div>
+
+      <span
+        class="hidden sm:inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full bg-brand-500/10 text-brand-400 border border-brand-500/20 animate-pulse-slow">
+        AI Powered
+      </span>
+    </header>
+
+    <!-- Main App Mount -->
+    <main
+      class="min-h-[60vh] rounded-xl bg-gray-950/70 border border-white/5 shadow-inner p-4 sm:p-6">
+      <div id="root"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-8 text-center text-xs text-gray-400">
+      Built with ⚡ AI · Premium UI · Fast & Scalable
+    </footer>
+  </div>
+
   <script type="module" src="/index.tsx"></script>
 </body>
 
